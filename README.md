@@ -2,6 +2,7 @@
 ## Pruebas de caja negra con Selenium sobre interfaces web  
 
 Alumno: Jesús Sánchez Pardo, <wjesus.sanchez@um.es>
+
 Alumno: Jiahui Lin, <jiahui.lin@um.es>
 
 ---
