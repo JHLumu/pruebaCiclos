@@ -1,4 +1,11 @@
-# P6-CalSo. Introducción a TDD. Uso de mocks y stubs
+# Práctiac 6 - Calidad de Software 25/26
+# Introducción a TDD. Uso de mocks y stubs
+
+**Alumno 1**: Jesús Sánchez Pardo, <wjesus.sanchez@um.es>
+
+**Alumno 2**: Jiahui Lin, <jiahui.lin@um.es>
+
+
 ## Proyecto formandera.com — Módulo de Admisiones
 La plataforma formandera.com es un sistema de gestión integral para la formación continua de profesionales. En ella se publican convocatorias de cursos, cada una con un número variable de plazas, una temática concreta y un conjunto de usuarios interesados en inscribirse.
 A medida que la plataforma ha crecido y se ha extendido entre distintos colectivos profesionales, han aparecido nuevas necesidades relacionadas con la gestión justa, transparente y automatizada de estas inscripciones.
