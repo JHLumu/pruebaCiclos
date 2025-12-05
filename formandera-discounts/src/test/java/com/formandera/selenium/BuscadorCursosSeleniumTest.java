@@ -7,6 +7,10 @@ import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+// Impotación añadida
+import io.github.bonigarcia.wdm.WebDriverManager;
+
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.time.Duration;
@@ -39,7 +43,10 @@ public class BuscadorCursosSeleniumTest {
     @BeforeEach
     void setup() {
         driver = new ChromeDriver();
-        driver.get("http://localhost:8080/buscador");
+	    /*
+	     * 	Antes -> driver.get("http://localhost:8080/buscador");
+	     */
+        driver.get("http://localhost:8080/buscar");
     }
 
     @AfterEach
