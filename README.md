@@ -289,3 +289,15 @@ Para cada case de prueba de os formuarios se añadiran los casos de prueba deriv
 | Trabajo en ramas y gestión colaborativa en GitHub | 1.0 punto |
 
 **Total:** 10 puntos  
+
+
+## Parte Jiahui Lin, formulario "buscar"
+
+### Ejercicio 1
+
+| Parámetro | Tipo | Clases Válidas | Clases Inválidas | Valores Límite|
+| :--- | :--- | :--- | :--- | :--- |
+| **Edad** | numérico | **CE01:** Edad $\ge$ 12 | **CE02:** Edad \< 12 | **11** (Inválido) <br> **12** (Válido) |
+| **Temática** | texto | **CE03:** Cadena con caracteres (longitud \> 0 y no solo espacios) | **CE04:** Cadena vacía o `null` <br> **CE05:** Cadena solo con espacios en blanco | N/A (longitud 0 vs 1 caracter) |
+| **Puntuación Mínima** | rango (numérico) | **CE06:** 1.0 $\le$ Puntuación $\le$ 5.0 | **CE07:** Puntuación \< 1.0 <br> **CE08:** Puntuación \> 5.0 | **0.9** (Inválido) <br> **1.0** (Válido) <br> **5.0** (Válido) <br> **5.1** (Inválido) |
+| **Cursos Completados** | numérico | **CE09:** Nº Cursos $\ge$ 0 | **CE10:** Nº Cursos \< 0 | **-1** (Inválido) <br> **0** (Válido) |
