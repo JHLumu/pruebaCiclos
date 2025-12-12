@@ -1,6 +1,7 @@
 # **Clase bajo prueba (CUT):** `SelectorAdmisionesUseCase`
 
 ## Roles
+
 Jiahui  --->    Tester  
 Jesús   --->    Dev
 
@@ -15,8 +16,8 @@ Para aislar completamente la lógica del caso de uso, se han identificado las si
 | **`IInscripcion`** | **STUB** | Es un modelo de datos (interfaz). Solo necesitamos que devuelva datos predefinidos (`getCredito()`, `getCursos()`) para ejercitar la lógica de selección. Actúa como Stub (aunque técnicamente lo generemos con `Mockito.mock` por ser una interfaz). |
 | **`IConvocatoria`** (si aplica) | **STUB** | Modelo de datos necesario para consultar límites (`getMaxPlazas()`). No verificamos interacción con ella, solo consultamos su estado. |
 
-
 ## Iteraciones de TDD
+
 ### Iteración 1
 
 **Clase Test:** `SelectorAdmisionesUseCaseTest`  
@@ -41,19 +42,19 @@ Se crea el atributo repositorio de la clase, Se crea la función `seleccionar()`
 
 ```java
 public class SelectorAdmisionesUseCase {
-	
-	// Clase a implementar con TDD
-	
-	private IConvocatoriaRepository convocatoria;
-	
-	
-	
-	public void seleccionar(long idConvocatoria) {
+ 
+ // Clase a implementar con TDD
+ 
+ private IConvocatoriaRepository convocatoria;
+ 
+ 
+ 
+ public void seleccionar(long idConvocatoria) {
 
-		convocatoria.obtenerInscripciones(idConvocatoria);
-	}
-	
-	
+  convocatoria.obtenerInscripciones(idConvocatoria);
+ }
+ 
+ 
 }
 ```
 
@@ -67,6 +68,7 @@ public class SelectorAdmisionesUseCase {
 #### TEST2 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/e71738240d1f1734a45aa4a3101f1a5dcd3dfb9d))
 
 Se añade un nuevo test para verificar la interacción con el servicio de dominio.
+
 ```java
 @Test
 void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServicioDeDominio() {
@@ -90,4 +92,20 @@ void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServ
     // Verificamos que el caso de uso llamó al servicio de ordenación pasando esa misma lista
     verify(ordenadorService).ordenar(inscripcionesSimuladas);
 }
+````
+
+#### DEV2 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/a1dd09455236feda339ef2d5bab9cc0a5b1dfe47))
+
+Se amplia `seleccionar()` para guardar el resultado que devuelve `obtenerInscripciones()` y ordenarlos con `ordenar()` de la clase `OrdenadorInscripcionesDomainService`.
+
+```java
+// Atributos de la clase
+ private IConvocatoriaRepository convocatoria; 
+ private OrdenadorInscripcionesDomainService ordenadorService;
+ 
+ // Métodos de la clase
+ public void seleccionar(long idConvocatoria) {
+  List<IInscripcion> inscripciones = convocatoria.obtenerInscripciones(idConvocatoria);
+  ordenadorService.ordenar(inscripciones);
+ }
 ````
