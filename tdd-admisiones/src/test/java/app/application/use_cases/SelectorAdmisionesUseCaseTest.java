@@ -26,7 +26,7 @@ class SelectorAdmisionesUseCaseTest {
     SelectorAdmisionesUseCase selectorUseCase;
 
     @Test
-    void debeSolicitarInscripcionesAlRepositorio() {
+    void test_GivenIdConvocatoria_WhenSeleccionar_ThenSolicitaInscripcionesAlRepositorio() {
         long idConvocatoria = 1L;
 
         selectorUseCase.seleccionar(idConvocatoria);
