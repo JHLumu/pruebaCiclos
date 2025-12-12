@@ -1,9 +1,16 @@
 # Práctiac 6 - Calidad de Software 25/26
 # Introducción a TDD. Uso de mocks y stubs
 
-**Alumno 1**: Jesús Sánchez Pardo, <wjesus.sanchez@um.es>
+**Alumno 1**: Jesús Sánchez Pardo, <wjesus.sanchez@um.es>  
 
-**Alumno 2**: Jiahui Lin, <jiahui.lin@um.es>
+**Alumno 2**: Jiahui Lin, <jiahui.lin@um.es>  
+
+
+| Funcionalidad | Rama                 | Tester    | Developer |
+| ------------- | -------------------- | --------- | --------- |
+| A             | `feature/ordenacion` | Jesús | Jiahui |
+| B             | `feature/seleccion`  | Jiahui | Jesús |
+
 
 
 ## Proyecto formandera.com — Módulo de Admisiones
