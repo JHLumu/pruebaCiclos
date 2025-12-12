@@ -208,3 +208,31 @@ Se añade un nuevo test para verificar que, una vez obtenidos los alumnos admiti
         verify(usuarioMock).incrementarCursos();
     }
 ```
+
+#### DEV4 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/2148dbbf8e6aa52cf9c6d7711e5f96298245c578))  
+
+La lista de inscripciones que han sido admitidas por el método `seleccionar()` de `ISelectorAdmisionesDomainService` se recorre para descontar el crédito del usuario, además de incrementar el número de cursos del usuario asociado.
+
+```java
+
+// Métodos de la clase
+	public void seleccionar(long idConvocatoria) {
+		List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
+		List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
+		IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
+		if (convocatoria != null) {
+			List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+			if (admitidos != null) {
+				
+				for (IInscripcion admitido : admitidos) {
+					Usuario user = admitido.getUser();
+					user.descontarCredito(convocatoria.getPrecio());
+					user.incrementarCursos();
+				}
+				
+			}
+		}
+		
+	}
+
+```
