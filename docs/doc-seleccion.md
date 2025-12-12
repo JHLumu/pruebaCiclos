@@ -26,14 +26,14 @@ Se crea el primer test para asegurar la colaboración con el repositorio.
 
 ```java
 @Test
-void debeSolicitarInscripcionesAlRepositorio() {
+void test_GivenIdConvocatoria_WhenSeleccionar_ThenSolicitaInscripcionesAlRepositorio() {
     long idConvocatoria = 1L;
     selectorUseCase.seleccionar(idConvocatoria);
     verify(convocatoriaRepository).obtenerInscripciones(idConvocatoria);
 }
 ```
 
-### DOC ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/a1dd09455236feda339ef2d5bab9cc0a5b1dfe47))
+### DEV1 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/a1dd09455236feda339ef2d5bab9cc0a5b1dfe47))
 
 Se crea el atributo repositorio de la clase, Se crea la función `seleccionar()` y dentro de esta se llama a `obtenerInscripciones`.
 
