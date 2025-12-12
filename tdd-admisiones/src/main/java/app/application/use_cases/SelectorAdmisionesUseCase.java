@@ -1,17 +1,22 @@
 package app.application.use_cases;
 
-import app.domain.repositories.IConvocatoriaRepository;
+import java.util.List;
 
+import app.domain.model.IInscripcion;
+import app.domain.repositories.IConvocatoriaRepository;
+import app.domain.services.OrdenadorInscripcionesDomainService;
+
+// Clase a implementar con TDD
 public class SelectorAdmisionesUseCase {
 	
-	// Clase a implementar con TDD
+	// Atributos de la clase
+	private IConvocatoriaRepository convocatoria;	
+	private OrdenadorInscripcionesDomainService ordenadorService;
 	
-	private IConvocatoriaRepository convocatoria;
-	
-	
-	
+	// Métodos de la clase
 	public void seleccionar(long idConvocatoria) {
-		convocatoria.obtenerInscripciones(idConvocatoria);
+		List<IInscripcion> inscripciones = convocatoria.obtenerInscripciones(idConvocatoria);
+		ordenadorService.ordenar(inscripciones);
 	}
 	
 	
