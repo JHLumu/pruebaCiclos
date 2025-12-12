@@ -110,6 +110,8 @@ Se amplia `seleccionar()` para guardar el resultado que devuelve `obtenerInscrip
  }
 ```
 
+-----
+
 ### Iteración 3
 
 **Clase Test:** `SelectorAdmisionesUseCaseTest`  
@@ -163,4 +165,46 @@ Se añade el atributo `selectorService` para la llamada a `seleccionar(inscripci
   }
   
  }
+```
+
+-----
+
+### Iteración 4
+
+**Clase Test:** `SelectorAdmisionesUseCaseTest`  
+**Clase Dev:** `SelectorAdmisionesUseCase`  
+
+#### TEST4 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/c74d27910fc772508e3cc5dd540fafa55ca9772b))  
+
+Se añade un nuevo test para verificar que, una vez obtenidos los alumnos admitidos del servicio de dominio, el caso de uso se encarga de aplicar los efectos colaterales (descontar crédito e incrementar cursos) sobre los usuarios correspondientes.
+
+```java
+@Test
+    void test_GivenInscripcionesSeleccionadas_WhenSeleccionar_ThenActualizaCreditoYCursosDeUsuariosAdmitidos() {
+        long idConvocatoria = 1L;
+        double precio = 200.0;
+        int maxPlazas = 5;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+
+        Usuario usuarioMock = mock(Usuario.class);
+        
+        IInscripcion inscripcionAdmitida = mock(IInscripcion.class);
+        when(inscripcionAdmitida.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaAdmitidos = List.of(inscripcionAdmitida);
+
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(selectorAdmisionesService.seleccionar(any(), eq(precio), eq(maxPlazas)))
+            .thenReturn(listaAdmitidos);
+
+        selectorUseCase.seleccionar(idConvocatoria);
+
+
+        // Verificamos que se actualiza el estado del usuario con el precio correcto
+        verify(usuarioMock).descontarCredito(precio);
+        verify(usuarioMock).incrementarCursos();
+    }
 ```
