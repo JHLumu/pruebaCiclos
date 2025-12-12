@@ -13,6 +13,7 @@ import app.domain.model.IConvocatoria;
 import app.domain.model.IInscripcion;
 import app.domain.model.Usuario;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
@@ -112,6 +113,26 @@ class SelectorAdmisionesUseCaseTest {
         // Verificamos que se actualiza el estado del usuario con el precio correcto
         verify(usuarioMock).descontarCredito(precio);
         verify(usuarioMock).incrementarCursos();
+    }
+    
+    @Test
+    void test_GivenNingunUsuarioAdmisible_WhenSeleccionar_ThenLanzaExcepcion() {
+        long idConvocatoria = 1L;
+        double precio = 200.0;
+        int maxPlazas = 5;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(selectorAdmisionesService.seleccionar(any(), eq(precio), eq(maxPlazas)))
+            .thenReturn(new ArrayList<>()); 
+
+        // Verificamos que al ejecutar el método se lance una RuntimeException
+        assertThrows(RuntimeException.class, () -> {
+            selectorUseCase.seleccionar(idConvocatoria);
+        });
     }
     
   
