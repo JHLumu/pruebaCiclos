@@ -142,3 +142,25 @@ Se añade un nuevo test para verificar que, tras ordenar las inscripciones, el c
         verify(selectorAdmisionesService).seleccionar(inscripcionesOrdenadas, precio, maxPlazas);
     }
 ```
+
+#### DEV 3 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/2d1721cc1d3003e53b65f0fcf62e82989b1f4022))  
+
+Se añade el atributo `selectorService` para la llamada a `seleccionar(inscripciones, precio, maxPlazas)`. Dado a que convocatoria es null para TEST1 y TEST2, se ha añadido un condicional que solo ejecuta el TEST3.
+
+```java
+// Atributos de la clase
+ private IConvocatoriaRepository convocatoriaRepository; 
+ private OrdenadorInscripcionesDomainService ordenadorService;
+ private ISelectorAdmisionesDomainService selectorService;
+ 
+ // Métodos de la clase
+ public void seleccionar(long idConvocatoria) {
+  List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
+  List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
+  IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
+  if (convocatoria != null) {
+   selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+  }
+  
+ }
+```
