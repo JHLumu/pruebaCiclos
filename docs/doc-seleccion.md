@@ -32,3 +32,25 @@ void debeSolicitarInscripcionesAlRepositorio() {
     verify(convocatoriaRepository).obtenerInscripciones(idConvocatoria);
 }
 ```
+
+### DOC ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/a1dd09455236feda339ef2d5bab9cc0a5b1dfe47))
+
+Se crea el atributo repositorio de la clase, Se crea la función `seleccionar()` y dentro de esta se llama a `obtenerInscripciones`.
+
+```java
+public class SelectorAdmisionesUseCase {
+	
+	// Clase a implementar con TDD
+	
+	private IConvocatoriaRepository convocatoria;
+	
+	
+	
+	public void seleccionar(long idConvocatoria) {
+
+		convocatoria.obtenerInscripciones(idConvocatoria);
+	}
+	
+	
+}
+```
