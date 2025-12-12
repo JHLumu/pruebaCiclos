@@ -11,7 +11,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import app.domain.model.IConvocatoria;
 import app.domain.model.IInscripcion;
+import app.domain.model.Usuario;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -80,6 +83,35 @@ class SelectorAdmisionesUseCaseTest {
         selectorUseCase.seleccionar(idConvocatoria);
 
         verify(selectorAdmisionesService).seleccionar(inscripcionesOrdenadas, precio, maxPlazas);
+    }
+    
+    @Test
+    void test_GivenInscripcionesSeleccionadas_WhenSeleccionar_ThenActualizaCreditoYCursosDeUsuariosAdmitidos() {
+        long idConvocatoria = 1L;
+        double precio = 200.0;
+        int maxPlazas = 5;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+
+        Usuario usuarioMock = mock(Usuario.class);
+        
+        IInscripcion inscripcionAdmitida = mock(IInscripcion.class);
+        when(inscripcionAdmitida.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaAdmitidos = List.of(inscripcionAdmitida);
+
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(selectorAdmisionesService.seleccionar(any(), eq(precio), eq(maxPlazas)))
+            .thenReturn(listaAdmitidos);
+
+        selectorUseCase.seleccionar(idConvocatoria);
+
+
+        // Verificamos que se actualiza el estado del usuario con el precio correcto
+        verify(usuarioMock).descontarCredito(precio);
+        verify(usuarioMock).incrementarCursos();
     }
     
   
