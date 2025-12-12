@@ -236,3 +236,36 @@ La lista de inscripciones que han sido admitidas por el método `seleccionar()` 
 	}
 
 ```
+
+-----
+
+### Iteración 5
+
+**Clase Test:** `SelectorAdmisionesUseCaseTest`  
+**Clase Dev:** `SelectorAdmisionesUseCase`  
+
+#### TEST5 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/b1355e95fc60482d5d62232bc57b40092bb6712a))  
+
+Se añade un test para verificar que el caso de uso impide continuar si no se ha podido seleccionar a ningún candidato, lanzando una excepción.
+
+```java
+@Test
+    void test_GivenNingunUsuarioAdmisible_WhenSeleccionar_ThenLanzaExcepcion() {
+        long idConvocatoria = 1L;
+        double precio = 200.0;
+        int maxPlazas = 5;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(selectorAdmisionesService.seleccionar(any(), eq(precio), eq(maxPlazas)))
+            .thenReturn(new ArrayList<>()); 
+
+        // Verificamos que al ejecutar el método se lance una RuntimeException
+        assertThrows(RuntimeException.class, () -> {
+            selectorUseCase.seleccionar(idConvocatoria);
+        });
+    }
+}
