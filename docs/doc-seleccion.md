@@ -92,7 +92,7 @@ void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServ
     // Verificamos que el caso de uso llamó al servicio de ordenación pasando esa misma lista
     verify(ordenadorService).ordenar(inscripcionesSimuladas);
 }
-````
+```
 
 #### DEV2 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/a1dd09455236feda339ef2d5bab9cc0a5b1dfe47))
 
@@ -108,4 +108,37 @@ Se amplia `seleccionar()` para guardar el resultado que devuelve `obtenerInscrip
   List<IInscripcion> inscripciones = convocatoria.obtenerInscripciones(idConvocatoria);
   ordenadorService.ordenar(inscripciones);
  }
-````
+```
+
+### Iteración 3
+
+**Clase Test:** `SelectorAdmisionesUseCaseTest`  
+**Clase Dev:** `SelectorAdmisionesUseCase`  
+
+#### TEST3 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/9ac5d6d8c46d431717a181e85c6a5ce38e2b9d40))  
+
+Se añade un nuevo test para verificar que, tras ordenar las inscripciones, el caso de uso recupera la información de la convocatoria y delega la lógica de selección al servicio de dominio `ISelectorAdmisionesDomainService`.
+
+```java
+@Test
+    void test_GivenInscripcionesOrdenadas_WhenSeleccionar_ThenLlamaAlServicioDeSeleccionConParametrosDeConvocatoria() {
+        long idConvocatoria = 1L;
+        int maxPlazas = 20;
+        double precio = 150.50;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+
+        List<IInscripcion> inscripciones = new ArrayList<>();
+        List<IInscripcion> inscripcionesOrdenadas = new ArrayList<>();
+
+        when(convocatoriaRepository.obtenerInscripciones(idConvocatoria)).thenReturn(inscripciones);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(ordenadorService.ordenar(inscripciones)).thenReturn(inscripcionesOrdenadas);
+
+        selectorUseCase.seleccionar(idConvocatoria);
+
+        verify(selectorAdmisionesService).seleccionar(inscripcionesOrdenadas, precio, maxPlazas);
+    }
+```
