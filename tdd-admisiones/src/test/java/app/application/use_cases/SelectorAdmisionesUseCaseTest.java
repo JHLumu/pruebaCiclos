@@ -15,6 +15,8 @@ import app.domain.model.Usuario;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -45,20 +47,36 @@ class SelectorAdmisionesUseCaseTest {
 
     @Test
     void test_GivenIdConvocatoria_WhenSeleccionar_ThenSolicitaInscripcionesAlRepositorio() {
-        long idConvocatoria = 1L;
+    	long idConvocatoria = 1L;
+        
+
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
+            .thenReturn(listaConAlguien);
+            
+        IConvocatoria conv = mock(IConvocatoria.class);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
 
         selectorUseCase.seleccionar(idConvocatoria);
 
-        // Verificamos la interacción: ¿Se llamó al repositorio con el ID correcto?
+
         verify(convocatoriaRepository).obtenerInscripciones(idConvocatoria);
     }
     
     @Test
     void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServicioDeDominio() {
-        long idConvocatoria = 1L;
+    	long idConvocatoria = 1L;
         List<IInscripcion> inscripcionesSimuladas = new ArrayList<>();
         
+        IConvocatoria conv = mock(IConvocatoria.class);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
+        
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
+            .thenReturn(listaConAlguien);
+
         when(convocatoriaRepository.obtenerInscripciones(idConvocatoria)).thenReturn(inscripcionesSimuladas);
+        
         selectorUseCase.seleccionar(idConvocatoria);
 
         verify(ordenadorService).ordenar(inscripcionesSimuladas);
@@ -80,6 +98,10 @@ class SelectorAdmisionesUseCaseTest {
         when(convocatoriaRepository.obtenerInscripciones(idConvocatoria)).thenReturn(inscripciones);
         when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
         when(ordenadorService.ordenar(inscripciones)).thenReturn(inscripcionesOrdenadas);
+        
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(inscripcionesOrdenadas, precio, maxPlazas))
+            .thenReturn(listaConAlguien);
 
         selectorUseCase.seleccionar(idConvocatoria);
 
