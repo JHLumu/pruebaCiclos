@@ -268,4 +268,77 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
             selectorUseCase.seleccionar(idConvocatoria);
         });
     }
-}
+```
+
+#### REFACTOR5 ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/fd17ed0b295eff8eaf7df459b17b2dc0b9dbd658))
+
+**Motivo:** Al implementar la validación que lanza una excepción si no hay alumnos admitidos (DEV5), los tests anteriores (`TEST1`, `TEST2` y `TEST3`) comenzaron a fallar. Esto ocurría porque, al usar mocks por defecto, se devolvían listas vacías, disparando la excepción antes de llegar a las verificaciones originales.
+
+**Cambios realizados:** Se han actualizado los `ARRANGE` de los tests 1, 2 y 3 para simular escenarios donde **sí existen alumnos admitidos**. De esta forma, el flujo de ejecución no se interrumpe por la excepción y permite verificar las interacciones que esos tests evaluaban originalmente.
+
+**Ejemplo de corrección (en TEST1):**
+
+```java
+@Test
+    void test_GivenIdConvocatoria_WhenSeleccionar_ThenSolicitaInscripcionesAlRepositorio() {
+    	long idConvocatoria = 1L;
+        
+
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
+            .thenReturn(listaConAlguien);
+            
+        IConvocatoria conv = mock(IConvocatoria.class);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
+
+        selectorUseCase.seleccionar(idConvocatoria);
+
+
+        verify(convocatoriaRepository).obtenerInscripciones(idConvocatoria);
+    }
+    
+    @Test
+    void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServicioDeDominio() {
+    	long idConvocatoria = 1L;
+        List<IInscripcion> inscripcionesSimuladas = new ArrayList<>();
+        
+        IConvocatoria conv = mock(IConvocatoria.class);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
+        
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
+            .thenReturn(listaConAlguien);
+
+        when(convocatoriaRepository.obtenerInscripciones(idConvocatoria)).thenReturn(inscripcionesSimuladas);
+        
+        selectorUseCase.seleccionar(idConvocatoria);
+
+        verify(ordenadorService).ordenar(inscripcionesSimuladas);
+    }
+    
+    @Test
+    void test_GivenInscripcionesOrdenadas_WhenSeleccionar_ThenLlamaAlServicioDeSeleccionConParametrosDeConvocatoria() {
+        long idConvocatoria = 1L;
+        int maxPlazas = 20;
+        double precio = 150.50;
+
+        IConvocatoria convocatoriaStub = mock(IConvocatoria.class);
+        when(convocatoriaStub.getMaxPlazas()).thenReturn(maxPlazas);
+        when(convocatoriaStub.getPrecio()).thenReturn(precio);
+
+        List<IInscripcion> inscripciones = new ArrayList<>();
+        List<IInscripcion> inscripcionesOrdenadas = new ArrayList<>();
+
+        when(convocatoriaRepository.obtenerInscripciones(idConvocatoria)).thenReturn(inscripciones);
+        when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
+        when(ordenadorService.ordenar(inscripciones)).thenReturn(inscripcionesOrdenadas);
+        
+        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        when(selectorAdmisionesService.seleccionar(inscripcionesOrdenadas, precio, maxPlazas))
+            .thenReturn(listaConAlguien);
+
+        selectorUseCase.seleccionar(idConvocatoria);
+
+        verify(selectorAdmisionesService).seleccionar(inscripcionesOrdenadas, precio, maxPlazas);
+    }
+```
