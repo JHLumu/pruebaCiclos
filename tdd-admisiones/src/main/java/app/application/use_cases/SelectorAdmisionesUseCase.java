@@ -4,6 +4,7 @@ import java.util.List;
 
 import app.domain.model.IConvocatoria;
 import app.domain.model.IInscripcion;
+import app.domain.model.Usuario;
 import app.domain.repositories.IConvocatoriaRepository;
 import app.domain.services.ISelectorAdmisionesDomainService;
 import app.domain.services.OrdenadorInscripcionesDomainService;
@@ -22,7 +23,16 @@ public class SelectorAdmisionesUseCase {
 		List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
 		IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
 		if (convocatoria != null) {
-			selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+			List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+			if (admitidos != null) {
+				
+				for (IInscripcion admitido : admitidos) {
+					Usuario user = admitido.getUser();
+					user.descontarCredito(convocatoria.getPrecio());
+					user.incrementarCursos();
+				}
+				
+			}
 		}
 		
 	}
