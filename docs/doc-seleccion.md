@@ -15,6 +15,7 @@ Para aislar completamente la lógica del caso de uso, se han identificado las si
 | **`OrdenadorInscripcionesDomainService`** | **MOCK** | Es un servicio de dominio ajeno a la unidad que estamos probando. No queremos testear el algoritmo de ordenación aquí (se prueba en su propia rama), sino verificar que el caso de uso *delega* la responsabilidad de ordenar a este servicio. |
 | **`IInscripcion`** | **STUB** | Es un modelo de datos (interfaz). Solo necesitamos que devuelva datos predefinidos (`getCredito()`, `getCursos()`) para ejercitar la lógica de selección. Actúa como Stub (aunque técnicamente lo generemos con `Mockito.mock` por ser una interfaz). |
 | **`IConvocatoria`** (si aplica) | **STUB** | Modelo de datos necesario para consultar límites (`getMaxPlazas()`). No verificamos interacción con ella, solo consultamos su estado. |
+| **`Usuario`** | **MOCK** | Aunque es una entidad de dominio, necesitamos verificar interacciones de cambio de estado. Al ser métodos `void`, usamos un mock para poder aplicar `verify()` y asegurar que el caso de uso delega la actualización correctamente. |
 
 ## Iteraciones de TDD
 
