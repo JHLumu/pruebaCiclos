@@ -216,24 +216,24 @@ La lista de inscripciones que han sido admitidas por el método `seleccionar()` 
 ```java
 
 // Métodos de la clase
-	public void seleccionar(long idConvocatoria) {
-		List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
-		List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
-		IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
-		if (convocatoria != null) {
-			List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
-			if (admitidos != null) {
-				
-				for (IInscripcion admitido : admitidos) {
-					Usuario user = admitido.getUser();
-					user.descontarCredito(convocatoria.getPrecio());
-					user.incrementarCursos();
-				}
-				
-			}
-		}
-		
-	}
+ public void seleccionar(long idConvocatoria) {
+  List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
+  List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
+  IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
+  if (convocatoria != null) {
+   List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+   if (admitidos != null) {
+    
+    for (IInscripcion admitido : admitidos) {
+     Usuario user = admitido.getUser();
+     user.descontarCredito(convocatoria.getPrecio());
+     user.incrementarCursos();
+    }
+    
+   }
+  }
+  
+ }
 
 ```
 
@@ -281,10 +281,10 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
 ```java
 @Test
     void test_GivenIdConvocatoria_WhenSeleccionar_ThenSolicitaInscripcionesAlRepositorio() {
-    	long idConvocatoria = 1L;
+     long idConvocatoria = 1L;
         
 
-    	Usuario usuarioMock = mock(Usuario.class);
+     Usuario usuarioMock = mock(Usuario.class);
         IInscripcion inscripcionMock = mock(IInscripcion.class);
         when(inscripcionMock.getUser()).thenReturn(usuarioMock);
         
@@ -303,7 +303,7 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
     
     @Test
     void test_GivenInscripcionesDelRepo_WhenSeleccionar_ThenSolicitaOrdenacionAlServicioDeDominio() {
-    	long idConvocatoria = 1L;
+     long idConvocatoria = 1L;
         List<IInscripcion> inscripcionesSimuladas = new ArrayList<>();
         
         IConvocatoria conv = mock(IConvocatoria.class);
@@ -353,4 +353,31 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
 
         verify(selectorAdmisionesService).seleccionar(inscripcionesOrdenadas, precio, maxPlazas);
     }
+```
+
+#### DEV5 [Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/84bcb8a4c8f63eab695c4af8e97437772d77c70b)
+
+Si la lista de admitidos está vacia, quiere decir que no hay ningun usuario admisible. En ese caso, se lanza una `RuntimeException`.
+
+```java
+public void seleccionar(long idConvocatoria) throws RuntimeException {
+  List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
+  List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
+  IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
+  if (convocatoria != null) {
+   List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
+   if (admitidos != null) {
+    
+    if (admitidos.isEmpty()) throw new RuntimeException(); // <--- Añadida en esta iteración
+    
+    for (IInscripcion admitido : admitidos) {
+     Usuario user = admitido.getUser();
+     user.descontarCredito(convocatoria.getPrecio());
+     user.incrementarCursos();
+    }
+    
+   }
+  }
+  
+ }
 ```
