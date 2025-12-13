@@ -18,13 +18,15 @@ public class SelectorAdmisionesUseCase {
 	private ISelectorAdmisionesDomainService selectorService;
 	
 	// Métodos de la clase
-	public void seleccionar(long idConvocatoria) {
+	public void seleccionar(long idConvocatoria) throws RuntimeException {
 		List<IInscripcion> inscripciones = convocatoriaRepository.obtenerInscripciones(idConvocatoria);
 		List<IInscripcion> ordenadas = ordenadorService.ordenar(inscripciones);
 		IConvocatoria convocatoria = convocatoriaRepository.obtenerConvocatoria(idConvocatoria);
 		if (convocatoria != null) {
 			List<IInscripcion> admitidos = selectorService.seleccionar(ordenadas, convocatoria.getPrecio(), convocatoria.getMaxPlazas());
 			if (admitidos != null) {
+				
+				if (admitidos.isEmpty()) throw new RuntimeException();
 				
 				for (IInscripcion admitido : admitidos) {
 					Usuario user = admitido.getUser();
