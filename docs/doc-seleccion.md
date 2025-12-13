@@ -276,7 +276,7 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
 
 **Cambios realizados:** Se han actualizado los `ARRANGE` de los tests 1, 2 y 3 para simular escenarios donde **sí existen alumnos admitidos**. De esta forma, el flujo de ejecución no se interrumpe por la excepción y permite verificar las interacciones que esos tests evaluaban originalmente.
 
-**Ejemplo de corrección (en TEST1):**
+**REFACTOR5.1** (Necesario para solucionar el `NullPointerException` al llamar al método `getUser()`) ([Ver commit](https://github.com/asuliitoh/Calso2526_P6-grupo07/commit/7978e5b890b0c4cfdb9f9656937dbacc0cfec441))
 
 ```java
 @Test
@@ -284,7 +284,11 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
     	long idConvocatoria = 1L;
         
 
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+    	Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
             .thenReturn(listaConAlguien);
             
@@ -305,7 +309,11 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
         IConvocatoria conv = mock(IConvocatoria.class);
         when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
         
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
             .thenReturn(listaConAlguien);
 
@@ -333,7 +341,11 @@ Se añade un test para verificar que el caso de uso impide continuar si no se ha
         when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
         when(ordenadorService.ordenar(inscripciones)).thenReturn(inscripcionesOrdenadas);
         
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(inscripcionesOrdenadas, precio, maxPlazas))
             .thenReturn(listaConAlguien);
 
