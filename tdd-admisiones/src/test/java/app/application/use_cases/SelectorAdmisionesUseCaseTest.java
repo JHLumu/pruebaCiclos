@@ -50,7 +50,11 @@ class SelectorAdmisionesUseCaseTest {
     	long idConvocatoria = 1L;
         
 
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+    	Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
             .thenReturn(listaConAlguien);
             
@@ -71,7 +75,11 @@ class SelectorAdmisionesUseCaseTest {
         IConvocatoria conv = mock(IConvocatoria.class);
         when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(conv);
         
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(any(), anyDouble(), anyInt()))
             .thenReturn(listaConAlguien);
 
@@ -99,7 +107,11 @@ class SelectorAdmisionesUseCaseTest {
         when(convocatoriaRepository.obtenerConvocatoria(idConvocatoria)).thenReturn(convocatoriaStub);
         when(ordenadorService.ordenar(inscripciones)).thenReturn(inscripcionesOrdenadas);
         
-        List<IInscripcion> listaConAlguien = List.of(mock(IInscripcion.class));
+        Usuario usuarioMock = mock(Usuario.class);
+        IInscripcion inscripcionMock = mock(IInscripcion.class);
+        when(inscripcionMock.getUser()).thenReturn(usuarioMock);
+        
+        List<IInscripcion> listaConAlguien = List.of(inscripcionMock);
         when(selectorAdmisionesService.seleccionar(inscripcionesOrdenadas, precio, maxPlazas))
             .thenReturn(listaConAlguien);
 
